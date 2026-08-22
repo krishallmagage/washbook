@@ -122,6 +122,10 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
 
+      # S1-09 — the built client bundle must contain no server secret.
+      - name: Assert no secrets in the client bundle
+        run: pnpm assert:bundle
+
       - name: Build Docker image
         run: |
           docker build \
@@ -152,12 +156,22 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      # Read the real credentials the CLI just generated rather than hardcoding
+      # placeholders. Placeholders were enough while nothing verified a token;
+      # now that PIN sign-in mints one, a mismatched JWT secret would make E2E
+      # pass against a signature the app could never actually accept.
+      - name: Export Supabase credentials
+        run: |
+          eval "$(pnpm exec supabase status -o env)"
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL"
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+            echo "SUPABASE_JWT_SECRET=$JWT_SECRET"
+          } >> "$GITHUB_ENV"
+
       - name: Run E2E
         run: pnpm e2e
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_LOCAL_ANON_KEY || 'ci-placeholder-anon-key' }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_LOCAL_SERVICE_KEY || 'ci-placeholder-service-key' }}
 
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}

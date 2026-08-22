@@ -63,11 +63,22 @@ describe('environment validation', () => {
   it('defaults BUILD_SHA so a local run is not blocked by build metadata', () => {
     const result = serverSchema.safeParse({
       SUPABASE_SERVICE_ROLE_KEY: 'service-key',
+      SUPABASE_JWT_SECRET: 'a-signing-secret-of-at-least-32-characters',
       NODE_ENV: 'test',
     })
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.data.BUILD_SHA).toBe('development')
     }
+  })
+  it('rejects a JWT signing secret too short to be meaningfully signed', () => {
+    // HS256 with a short key is signature theatre. Anything that can sign a
+    // token can mint one for any site and any role (ADR-0008).
+    const result = serverSchema.safeParse({
+      SUPABASE_SERVICE_ROLE_KEY: 'service-key',
+      SUPABASE_JWT_SECRET: 'too-short',
+      NODE_ENV: 'test',
+    })
+    expect(result.success).toBe(false)
   })
 })

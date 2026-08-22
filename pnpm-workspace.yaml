@@ -9,3 +9,4 @@ allowBuilds:
 # block a version we chose on purpose.
 minimumReleaseAgeExclude:
   - eslint@10.9.0
+  - jose@6.2.10

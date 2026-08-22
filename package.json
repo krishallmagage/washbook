@@ -31,16 +31,20 @@
     "docker:up": "docker compose --env-file .env.local up -d --build",
     "docker:down": "docker compose --env-file .env.local down",
     "docker:logs": "docker compose --env-file .env.local logs -f",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm assert:bundle",
     "prepare": "husky",
     "docker:build": "docker build --build-arg NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=local-build-check -t washbook:check .",
-    "docker:dev": "docker compose --env-file .env.local -f docker-compose.dev.yml up"
+    "docker:dev": "docker compose --env-file .env.local -f docker-compose.dev.yml up",
+    "assert:bundle": "node scripts/assert-no-secrets-in-bundle.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.4",
     "@supabase/supabase-js": "2.112.3",
+    "jose": "6.2.10",
     "next": "16.3.2",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "0.0.1",
     "zod": "4.4.3"
   },
   "devDependencies": {

@@ -10,14 +10,24 @@ import { expect, test } from '@playwright/test'
  */
 
 test.describe('base path and app shell', () => {
-  test('the root path redirects to /washbook rather than 404ing', async ({
+  test('the root path redirects under the base path rather than 404ing', async ({
     page,
   }) => {
     // Deliberately requests the server root, not the baseURL.
     const response = await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     expect(response?.status()).toBeLessThan(400)
-    expect(new URL(page.url()).pathname).toBe('/washbook')
+    expect(new URL(page.url()).pathname).toMatch(/^\/washbook(\/|$)/)
+  })
+
+  test('an unauthenticated visitor is sent to sign in, never to the app', async ({
+    page,
+  }) => {
+    // US-10.1 AC2 — access control is enforced server-side. RLS would refuse
+    // the data anyway, but a signed-out user must not reach an app screen at
+    // all, or they see a broken page instead of a way back in.
+    await page.goto('/')
+    expect(new URL(page.url()).pathname).toBe('/washbook/sign-in')
   })
 
   test('the app shell renders under the base path', async ({ page }) => {
@@ -53,8 +63,8 @@ test.describe('base path and app shell', () => {
   }) => {
     // NFR-12. Asserted from Slice 0 so it never becomes a retrofit.
     await page.goto('/')
-    const link = page.getByRole('link', { name: /service health/i })
-    const box = await link.boundingBox()
+    const submit = page.getByRole('button', { name: /sign in/i })
+    const box = await submit.boundingBox()
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
   })
 })
