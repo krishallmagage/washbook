@@ -32,110 +32,28 @@ This PRD is written to be read by both a human and a coding agent. Section 9 (us
 
 ## 1. Executive summary
 
-WashBook is a mobile-first operations and cash-control system for Sri Lankan vehicle wash and detailing centres — standalone car washes, wash bays attached to fuel stations, and small detailing studios.
-
-**The insight this product is built on:** a car wash is a high-frequency, low-ticket, cash-intensive business, usually run by an owner who is not physically present for most of the working day, staffed by daily-wage workers, and recorded — if at all — in a school exercise book. The owner cannot answer three questions at the end of a day: how many vehicles came in, what was charged for them, and how much of that reached him. Every other problem in the business is downstream of that.
-
-WashBook makes the vehicle the unit of record. Every vehicle that enters gets a ticket at the gate. The ticket carries the vehicle class, the services chosen, the price from the owner's own price list, the staff assigned, and photographs taken before work starts. The ticket becomes the bill. The bills become the day's cash reconciliation, which lands on the owner's phone whether he is at the site or not.
-
-Two commercial consequences follow, and they are what the product is actually sold on:
-
-1. **Leakage stops.** When every vehicle is ticketed at the gate and the day's cash is reconciled against tickets, off-the-book washes become visible. This is the reason an owner pays.
-2. **The customer becomes reachable.** A washed vehicle is a known number plate with a phone number and a date. That turns a walk-in trade into a recall business — reminders, prepaid packages, and monthly plans. This is the reason an owner stays.
-
-**Target v1 customer:** an owner-operated wash with 2–6 bays and 4–15 staff, doing 20–80 vehicles a day, in or near Colombo, Gampaha, Kandy, Galle, Kurunegala or Negombo.
-
-**Target v1 price:** Rs. 4,500/month single site, Rs. 8,500/month multi-bay/multi-site, with a Rs. 15,000 setup fee. Positioned against a single day's unrecorded takings.
-
-**Target v1 build effort:** 3–4 weeks of AI-assisted development to a pilot-ready system, on the scope defined in Section 19 as Release M1.
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
 ## 2. Market context and evidence
 
-### 2.1 The vehicle base is growing again after a five-year freeze
-
-Sri Lanka's registered vehicle population reached **8,816,613 at the end of 2025**, up from 8,454,513 in 2024. Of these, **973,376 are motor cars** and **458,632 are dual-purpose vehicles** (vans, SUVs, cabs) — roughly 1.43 million four-wheel light vehicles, which is the core addressable fleet for a paid wash. Add **1,201,842 three-wheelers** and **5,177,085 motorcycles** as a secondary, lower-ticket segment.
-
-New registrations tell the more important story. Vehicle imports were suspended for close to five years and reopened in 2025. **New registrations went from 74,410 in 2024 to 362,100 in 2025** — a near five-fold increase in one year, with reported import taxes of Rs. 896 billion. A new vehicle owner is materially more likely to pay for regular professional washing and paint protection than the owner of a fifteen-year-old car kept running out of necessity.
-
-**Implication for the product:** demand for the customer's service is rising independent of anything the customer does. That makes this a good moment to sell an operations product — the owner is dealing with more volume than his paper system can hold.
-
-### 2.2 The software gap is specific, not general
-
-Sri Lanka has a crowded market of general point-of-sale vendors — CloudCell POS, Lanka POS, POSLK, POS Masters, POSSystem.lk and others — all positioned for retail, restaurant, grocery and pharmacy. None of them are built for a wash bay. Car-wash-specific products exist regionally (for example, Indian vendors selling car wash billing apps), but not localised for Sri Lanka.
-
-A general retail POS fails at a car wash for concrete reasons, and these gaps define the product:
-
-| A wash needs                                                          | A retail POS gives                   |
-| --------------------------------------------------------------------- | ------------------------------------ |
-| Price that varies by vehicle class for the same service               | One price per SKU                    |
-| The number plate as the customer key                                  | A phone number, entered optionally   |
-| A job that stays open for 30–90 minutes across several bays and staff | An instant transaction               |
-| Before/after photographs attached to the job                          | No media capture                     |
-| Wash-package balances redeemed over months                            | Gift vouchers at best                |
-| Per-washer commission calculated from completed jobs                  | No labour attribution                |
-| Service history by vehicle for recall marketing                       | Purchase history by customer, unused |
-
-**Implication:** you are not competing on price against POS vendors. You are competing against an exercise book, and the POS vendors are not in the fight because their product does not fit the job.
-
-### 2.3 Compliance context
-
-Two obligations touch this customer and should be treated as product surface, not just background:
-
-- **VAT invoice format.** From 1 October 2026 a tax invoice issued by a VAT-registered business must follow the prescribed gazette format, including the serial scheme `YYMMM_QQQQ_XXXXX`, both parties' TINs, and separately disclosed VAT. Most single-site washes fall below the Rs. 60 million registration threshold and will not need this. Multi-site operators, fuel-station groups and corporate-account washes will. Building it in makes the product sellable upmarket and reuses work from a separate opportunity on the same list.
-- **Local authority and environmental licensing.** Vehicle servicing and washing generates oily and detergent-laden wastewater. Whether a given wash requires an Environmental Protection Licence, and under which category, depends on the prescribed-activity list in the relevant CEA gazette and on the local authority. **This is an open item — see Section 17, OQ-07.** Do not make claims about it in sales material until verified. If it does apply, a licence-renewal reminder is a cheap, high-trust feature.
-
-### 2.4 Why this segment rather than general vehicle servicing
-
-Compared with mechanical garages, which the original assessment ranked in the same slot, a wash has four structural advantages for a first product:
-
-1. **Higher frequency.** A car is serviced two or three times a year. It is washed two to four times a month. Frequency is what makes recall marketing, packages and subscriptions work at all.
-2. **Simpler job model.** No parts inventory, no supplier costing, no warranty, no technical diagnosis. A wash job is a short list of services against one vehicle. That removes the largest chunk of build complexity.
-3. **Sharper cash pain.** Garages invoice; washes take cash at a gate, often with the owner absent. Leakage is a bigger and more emotive problem, which makes the sale easier.
-4. **Faster proof.** A pilot site produces a month of usable data in a month. A garage takes a year to show whether service recall worked.
-
-The trade-off is honest and should be recorded: **ticket values are lower**, so the customer is smaller and more price-sensitive than a garage, and there is no regulatory deadline forcing adoption. This product will be sold one owner at a time, on evidence.
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
 ## 3. Problem statement
 
-### 3.1 Primary problem — the owner cannot see his own business
-
-> "I know roughly what a good day looks like. I do not know what today looked like."
-
-The owner of a wash typically holds two or three businesses or a job, and visits the site for part of the day. In his absence, the site runs on verbal instruction. Vehicles arrive, a supervisor quotes a price from memory, work is done, cash is taken at the gate, and at some point a figure is handed over or banked. There is no independent record of what came in, so there is nothing for the cash to be reconciled against.
-
-The consequences, in the order owners feel them:
-
-| #   | Consequence                  | How it shows up                                                               |
-| --- | ---------------------------- | ----------------------------------------------------------------------------- |
-| 1   | **Unrecorded jobs**          | Vehicles washed outside the day's count; cash never enters the business       |
-| 2   | **Unauthorised discounting** | Supervisor gives "friend price"; owner never learns the rate actually charged |
-| 3   | **Price drift**              | The published price list and the price actually quoted diverge over months    |
-| 4   | **Unverifiable wages**       | Daily-wage and commission claims cannot be checked against work done          |
-| 5   | **Chemical shrinkage**       | Consumables leave the store faster than the vehicle count explains            |
-| 6   | **No customer asset**        | Thousands of vehicles served, no way to contact a single one                  |
-| 7   | **Damage disputes**          | A customer claims a scratch; there is no evidence either way                  |
-
-### 3.2 Secondary problem — every washed vehicle is forgotten
-
-A wash serves the same vehicles repeatedly and knows nothing about them. There is no record that vehicle `CAR-1234` came on 3 August, took a full wash and wax, paid Rs. 3,500, and has not returned since. So the business cannot:
-
-- send a recall message at the interval that fits that customer
-- sell a prepaid package or a monthly plan, because there is no balance to track
-- notice that a regular customer has stopped coming
-- prove to a corporate fleet client what was done and when
-
-**The retention upside is the story that makes the product exciting. The leakage problem is the one that closes the sale.** Sales material should lead with cash control and let recall be the discovery.
-
-### 3.3 Why the customer cannot solve this himself
-
-- A spreadsheet does not work at a gate, in the rain, on a phone, with wet hands, while a customer waits.
-- Retail POS software does not model vehicle-class pricing, open jobs, bays, or wash packages, and the vendors will not build it for one customer.
-- Building custom software is not something a wash owner can specify or supervise.
-- The staff who would have to adopt a recording system are, in some sites, the people who benefit from its absence. **This is the central adoption risk and is treated explicitly in Section 18, R-01.**
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
@@ -153,15 +71,11 @@ A wash serves the same vehicles repeatedly and knows nothing about them. There i
 | G-06 | Staff pay — daily wage plus per-job commission — is computed from work actually recorded              |
 | G-07 | The site holds photographic evidence of vehicle condition at intake                                   |
 
-### 4.2 Business goals (for the vendor — you)
+### 4.2 Business goals (for the vendor)
 
-| ID   | Goal                      | Target                                         |
-| ---- | ------------------------- | ---------------------------------------------- |
-| B-01 | Paying pilot sites        | 3 within 60 days of M1                         |
-| B-02 | Paying sites              | 20 within 6 months of launch                   |
-| B-03 | Monthly recurring revenue | Rs. 90,000 by month 6                          |
-| B-04 | Gross logo churn          | Under 5% per month after month 3               |
-| B-05 | Support load              | Under 30 minutes per site per month by month 4 |
+> Moved to `docs/private/PRD-COMMERCIAL.md`. Vendor revenue targets are not
+> something to publish. 4.1, 4.3 and 4.4 stay here — 4.4 in particular defines
+> the metrics the code measures (intake capture rate, time to ticket).
 
 ### 4.3 Non-goals for v1
 
@@ -193,72 +107,10 @@ If intake capture rate falls below 80% at the pilot site, **the product has fail
 
 ## 5. Stakeholders and personas
 
-### 5.1 Stakeholder map
-
-| Stakeholder               | Interest                    | Influence on purchase                | Attitude to the product                                                    |
-| ------------------------- | --------------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| Owner                     | Cash visibility, growth     | Decision maker                       | Champion                                                                   |
-| Site supervisor / manager | Runs the floor              | Strong influencer, can kill adoption | Ambivalent to hostile                                                      |
-| Cashier                   | Takes money, closes the day | User                                 | Neutral                                                                    |
-| Washers / detailers       | Paid daily + commission     | Users of the assignment flow         | Positive if commission is visible, negative if surveillance is the framing |
-| Customer (vehicle owner)  | Speed, fairness, no damage  | None directly                        | Positive — receipts, no queue arguments                                    |
-| Corporate fleet client    | Documented service          | Influences upmarket sites            | Positive                                                                   |
-| Accountant / bookkeeper   | Month-end figures           | Influencer                           | Positive                                                                   |
-
-### 5.2 Personas
-
----
-
-**P1 — Nuwan, the owner. Primary buyer.**
-
-- 38, owns a 4-bay wash on a main road; also runs a hardware shop
-- On site for perhaps two hours a day, usually late afternoon
-- Phone: mid-range Android. Uses WhatsApp constantly, Facebook, occasionally a banking app
-- Uses no business software. Keeps prices in his head and a notebook
-- **Wants:** to know today's number without calling anyone
-- **Fears:** being cheated by people he cannot supervise; looking foolish in front of his staff if a system he introduced fails
-- **Buying trigger:** a specific incident — a day's takings that made no sense, a discovered off-book arrangement, a wage dispute
-- **Success for him:** he opens WhatsApp at 7pm and the day is there, and it matches the cash
-
----
-
-**P2 — Sanjeewa, the site supervisor. The gatekeeper.**
-
-- 31, has run the floor for four years, knows every regular customer
-- Quotes prices, allocates work, manages the queue, handles complaints
-- Phone: Android, comfortable with apps, not with typing long text
-- **Wants:** to not be slowed down; to not be blamed for the queue
-- **Fears:** being monitored; being made to look slow; extra work with no benefit to him
-- **Will kill the product if:** the intake screen is slower than shouting a price, or if it is introduced as a surveillance tool
-- **Wins him over:** the queue board that ends "is my car ready?" interruptions, and commission he can prove
-
----
-
-**P3 — Kasun, the washer.**
-
-- 24, paid a daily wage plus a share per vehicle
-- Phone: entry-level Android, mostly WhatsApp and YouTube; limited literacy in English
-- **Wants:** his count and his money to be right at the end of the week
-- **Cares about:** Sinhala labels, big buttons, as few taps as possible
-- **Interaction:** taps to claim/complete a job. Nothing else.
-
----
-
-**P4 — Dilani, the cashier.**
-
-- 27, takes payment at the counter, closes the day, hands cash to the owner
-- **Wants:** the day to balance so she is not blamed
-- **Pain:** currently reconstructs the day from memory and scraps of paper
-- **Interaction:** payment capture, day close, variance note
-
----
-
-**P5 — Rasika, the customer.**
-
-- Brings a two-year-old car every fortnight
-- **Wants:** to know how long it will take and to not be argued with about price
-- **Would value:** an SMS/WhatsApp when the vehicle is ready, and a receipt
-- **Not a user of the app.** Receives messages only. Do not build a customer app in v1.
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
@@ -1080,56 +932,19 @@ _Append-only. No update or delete path may exist in the application or the API._
 
 ## 17. Assumptions, open questions and dependencies
 
-### 17.1 Assumptions requiring validation at the pilot site
-
-| ID   | Assumption                                               | If wrong                                                                     |
-| ---- | -------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| A-01 | Owners are absent for a material part of the working day | The cash-control pitch weakens; lead with retention instead                  |
-| A-02 | Cash is the dominant payment method                      | Reconciliation is less valuable; reweight toward recall and packages         |
-| A-03 | Price is a service × vehicle-class grid                  | Rework the pricing model before building anything else                       |
-| A-04 | Staff have Android phones capable of running a PWA       | Shift to a single shared tablet at the counter                               |
-| A-05 | Staff will tolerate tapping to claim and complete jobs   | Drop per-staff interaction; supervisor assigns and completes on their behalf |
-| A-06 | Sites do 20–80 vehicles a day                            | Recheck pricing and the value story at the real volume                       |
-| A-07 | Customers will give a mobile number                      | Recall marketing collapses; make packages and receipts the capture mechanism |
-| A-08 | Ticket sizes are in the assumed ranges of Section 6.1    | Revisit the price point of the product itself                                |
-
-### 17.2 Open questions
-
-| ID    | Question                                                                                                                               | Owner   | Needed by                                            |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- | ---------------------------------------------------- |
-| OQ-01 | What does the pilot site record today, and who records it?                                                                             | Founder | Before build                                         |
-| OQ-02 | How is the day's cash actually handed over, and how often?                                                                             | Founder | Before build                                         |
-| OQ-03 | Exact wage and commission structure at the pilot site                                                                                  | Founder | Before Epic 8                                        |
-| OQ-04 | Does the site have wifi in the bay area, or only mobile data?                                                                          | Founder | Before Epic 11                                       |
-| OQ-05 | Is there an existing printer, and what size?                                                                                           | Founder | Before Epic 4                                        |
-| OQ-06 | Is the site VAT-registered? Does it have corporate accounts?                                                                           | Founder | Before M3                                            |
-| OQ-07 | Does a wash of this size require an Environmental Protection Licence or a specific local-authority licence, and on what renewal cycle? | Founder | Before making any compliance claim in sales material |
-| OQ-08 | What proportion of customers are repeat, at the pilot site's own estimate?                                                             | Founder | Before Epic 6                                        |
-| OQ-09 | Has the owner ever tried software before, and what happened?                                                                           | Founder | Before pricing the pilot                             |
-
-### 17.3 Dependencies
-
-- Access to one cooperative pilot site for observation, testing and reference — **confirmed available**
-- A second and third site of a different shape (fuel-station bay, detailing studio) for design validation before launch
-- A WhatsApp Business number for the vendor's own support and, later, template approval
-- A local PSP merchant account for collecting subscription revenue
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
 ## 18. Risks
 
-| ID   | Risk                                                                                                              | Likelihood | Impact | Mitigation                                                                                                                                                                                                                                                    |
-| ---- | ----------------------------------------------------------------------------------------------------------------- | ---------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| R-01 | **Staff sabotage adoption.** The people asked to record every vehicle may be the people benefiting from no record | High       | Fatal  | Never position it as surveillance. Ship the commission view and the queue board in the same release as intake, so staff gain something visible on day one. Make intake genuinely faster than the current method — this is a product requirement, not a nicety |
-| R-02 | Intake is too slow in practice and gets bypassed at peak                                                          | Medium     | Fatal  | 20-second target as a hard acceptance criterion; observe a real Saturday before finalising the screen                                                                                                                                                         |
-| R-03 | Owner buys, does not open it, churns in month three                                                               | Medium     | High   | Push the daily summary rather than waiting for a login; make the summary the product surface the owner actually uses                                                                                                                                          |
-| R-04 | Connectivity failures at the site break trust                                                                     | Medium     | High   | Offline-first intake; visible sync state; never block the gate                                                                                                                                                                                                |
-| R-05 | Price sensitivity — Rs. 4,500/month is real money to a small wash                                                 | Medium     | Medium | Anchor on a single day's leakage; offer annual prepay; charge a setup fee that covers onboarding                                                                                                                                                              |
-| R-06 | A generic POS vendor bundles a car-wash mode                                                                      | Low        | Medium | Depth is the defence — packages, commission, photos, recall. Move fast to reference customers                                                                                                                                                                 |
-| R-07 | Support load per site exceeds what one person can carry                                                           | Medium     | High   | Self-serve setup wizard; Sinhala video per feature; cap onboarding at one site per week initially                                                                                                                                                             |
-| R-08 | Photograph storage costs grow unexpectedly                                                                        | Low        | Medium | Compress at capture; 90-day retention default; monitor per-site storage                                                                                                                                                                                       |
-| R-09 | Founder is part-time; delivery slips and the pilot loses interest                                                 | Medium     | High   | Time-box M1 hard at four weeks; ship a narrow, working slice rather than a broad, unfinished one                                                                                                                                                              |
-| R-10 | The pilot site is unrepresentative and the product overfits to it                                                 | Medium     | Medium | Validate the model against two more sites of different types before launch pricing is set                                                                                                                                                                     |
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
@@ -1202,72 +1017,19 @@ Framed for solo, AI-assisted development. Optimise for one person's ability to c
 
 ## 21. Commercials
 
-### 21.1 Packaging
-
-| Plan           | Includes                                                                     | Price                                        |
-| -------------- | ---------------------------------------------------------------------------- | -------------------------------------------- |
-| **Single bay** | 1 site, up to 2 bays, unlimited tickets, 3 users                             | Rs. 3,500/mo                                 |
-| **Standard**   | 1 site, unlimited bays, unlimited users, packages, recall, reports           | Rs. 6,500/mo                                 |
-| **Multi-site** | 2+ sites, consolidated reporting, corporate accounts, VAT invoicing          | Rs. 6,500/mo + Rs. 4,000 per extra site      |
-| **Setup**      | Data entry, price grid build, staff setup, on-site training, printer pairing | Rs. 15,000 one-off                           |
-| **Annual**     | Any plan                                                                     | 12 months for the price of 10, paid up front |
-
-### 21.2 The value argument
-
-Do not sell time saved. Sell a number:
-
-> "You do 60 vehicles a day. If two of them a day are not reaching your book, at Rs. 1,500 that is Rs. 90,000 a month. This costs Rs. 6,500."
-
-Two vehicles a day is a deliberately conservative claim and the owner will do the arithmetic himself, which is exactly what you want.
-
-### 21.3 First twenty customers
-
-1. **Pilot site as reference.** Get a filmed testimonial and a real screenshot of a month's data (with figures obscured).
-2. **Walk the road.** Washes cluster on arterial roads. Ten shops in an afternoon in Kottawa, Nugegoda, Rajagiriya, Battaramulla, Wattala.
-3. **The opening line is a question, not a demo:** _"How do you know how many vehicles you did yesterday?"_
-4. **Fuel station operators.** One dealer group often runs several forecourt wash bays — one conversation, multiple sites.
-5. **Detailing studios.** Higher ticket, more software-receptive, better margins, more likely to value photographs and history.
-6. **Chemical and equipment suppliers as a channel.** They visit every wash in a district on a route. A referral arrangement puts you in front of dozens of owners you would otherwise cold-call.
-7. **Facebook groups** for vehicle owners and car-care businesses, and the vehicle service station association network.
-
-### 21.4 Pilot terms
-
-Free for 30 days, then Rs. 3,500/month for the first six months, in exchange for: weekly feedback sessions, permission to observe on site, and a reference call with prospects. Get this in writing, even informally on WhatsApp. A free pilot with no obligations produces polite feedback and no signal.
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
 ## 22. Pilot discovery script
 
-Use this at the pilot site **before** writing code. Observe first, ask second. Two hours on a busy day is worth more than a week of assumptions.
-
-**Observe (do not ask):**
-
-- Count vehicles in and out for one hour. Compare with whatever the site records.
-- Time the gate interaction: arrival to work starting.
-- Note every point where a price is spoken aloud.
-- Note where cash physically goes, and how many hands touch it.
-- Note whether staff have phones out during work.
-
-**Ask the owner:**
-
-1. Walk me through yesterday. How many vehicles, how much money?
-2. How do you know that is right?
-3. What is the last thing that happened here that made you angry?
-4. If you could see one number on your phone at 7pm every day, what would it be?
-5. What happens when a customer says we scratched his car?
-6. How do you pay the boys, and how often is there an argument about it?
-7. How many of the cars that came today have been here before? How do you know?
-8. Have you tried any software before? What happened?
-9. If I could show you every vehicle that came in today with what was charged, what would that be worth to you a month?
-
-**Ask the supervisor (separately, and this matters):**
-
-1. What is the most annoying part of a busy Saturday?
-2. How do you decide what to charge a vehicle you have not seen before?
-3. How do you keep track of which car is where?
-4. If the owner asked you to write down every vehicle, what would go wrong?
-
-That last question is the most important one in this document. His answer tells you whether the product ships or dies.
+> Moved to `docs/private/PRD-COMMERCIAL.md`, which is not tracked by git.
+> This repository is public; pricing, market analysis, personas, risks and the
+> sales playbook are not things to publish. Nothing in the codebase depends on
+> this section — the build contract is §9, §11, §12, §13, §15 and §24.
 
 ---
 
