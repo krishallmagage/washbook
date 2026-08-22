@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+/*
+ * NFR-12: minimum 16px body text, 44px touch targets, contrast sufficient for
+ * outdoor daylight reading. These are product requirements, not preferences —
+ * the users are standing at a gate in Sri Lankan sun with wet hands.
+ */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Noto Sans Sinhala', sans-serif;
+
+  /* Minimum interactive target. Referenced by the ui components in Slice 1. */
+  --spacing-touch: 2.75rem; /* 44px */
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  /* Never below 16px — NFR-12. */
+  font-size: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS Safari zooming the page when a form field is focused, which on a
+   gate screen reads as the app breaking. Requires >=16px inputs, which NFR-12
+   demands anyway. */
+input,
+select,
+textarea,
+button {
+  font-size: max(1rem, 16px);
+}

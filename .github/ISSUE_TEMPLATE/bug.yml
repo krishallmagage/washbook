@@ -1,0 +1,85 @@
+name: Bug
+description: Something is wrong
+title: 'fix: '
+labels: ['type:bug']
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Bugs get a failing test first (CLAUDE.md §2). Reproduce, write the test
+        that fails, then fix, then show both.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What should have happened
+      description: If a PRD acceptance criterion or business rule was violated, name it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: money
+    attributes:
+      label: Does this affect money, cash reconciliation, or the audit log?
+      description: >
+        These get priority over everything else. A wrong figure destroys the
+        owner's trust in the product, which is the whole product.
+      options:
+        - 'No'
+        - 'Yes — a figure is wrong'
+        - 'Yes — an audit entry is missing or wrong'
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tenancy
+    attributes:
+      label: Could one site see another site's data?
+      description: Answer "Yes" and this is handled as a security issue, not a bug.
+      options:
+        - 'No'
+        - 'Yes'
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: Android 13, Chrome 120, 3GB RAM
+
+  - type: dropdown
+    id: connectivity
+    attributes:
+      label: Connectivity at the time
+      options:
+        - Online
+        - Offline
+        - Intermittent
+        - Unknown
+
+  - type: input
+    id: screen-code
+    attributes:
+      label: Screen code
+      description: The short code shown on the screen (NFR-14).

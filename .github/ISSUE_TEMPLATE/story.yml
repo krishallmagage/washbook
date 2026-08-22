@@ -1,0 +1,55 @@
+name: User story
+description: A PRD user story to be built as a vertical slice
+title: 'US-x.y — '
+labels: []
+body:
+  - type: input
+    id: story-id
+    attributes:
+      label: PRD story ID
+      placeholder: US-1.1
+    validations:
+      required: true
+
+  - type: textarea
+    id: statement
+    attributes:
+      label: Story
+      description: Copied verbatim from the PRD.
+      placeholder: As a supervisor, I want to record an arriving vehicle in under 20 seconds, so that recording never slows the gate down.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: >
+        Copied verbatim from PRD §9. Each one becomes a test named after it —
+        do not paraphrase, or the test name stops matching the contract.
+      placeholder: |
+        - AC1 Given the intake screen is open, when I enter a plate number and select a vehicle class and one service, then a Save control is enabled and no other field is mandatory.
+        - AC2 ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: rules
+    attributes:
+      label: Business rules to enforce in the database
+      description: PRD §13 rules this slice must enforce as a constraint, check or trigger.
+      placeholder: BR-11 — plate matching is on the normalised plate.
+
+  - type: textarea
+    id: offline
+    attributes:
+      label: Offline behaviour
+      description: What PRD §11 requires of this screen when there is no connectivity.
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Open questions or assumptions
+      description: >
+        Anything relying on an unvalidated PRD §17 assumption, or needing a
+        decision. Mirror it into CLAUDE.md §6.

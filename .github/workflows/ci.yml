@@ -1,0 +1,167 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22.14.0'
+
+jobs:
+  # Fast feedback. Everything here runs off one install and fails in seconds
+  # rather than minutes.
+  static:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Unit tests
+        run: pnpm test
+
+      # Bootstrap brief §1.3 and §7: no key, token or .env file ever enters the
+      # repository. Cheap belt-and-braces on top of .gitignore.
+      - name: Assert no committed secrets
+        run: |
+          if git ls-files | grep -E '^\.env(\..*)?$' | grep -v '^\.env\.example$'; then
+            echo "::error::A .env file is tracked by git. Only .env.example may be committed."
+            exit 1
+          fi
+          if git grep -nIE 'service_role.*ey[A-Za-z0-9_-]{20,}' -- . ':!*.example' ':!docs/*'; then
+            echo "::error::A Supabase service-role key appears to be committed."
+            exit 1
+          fi
+
+  # Proves RLS and constraints rather than intentions — bootstrap brief §1.2.
+  database:
+    name: Database tests (pgTAP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Start Supabase
+        run: pnpm exec supabase start
+
+      - name: Apply migrations from scratch
+        run: pnpm exec supabase db reset --no-seed
+
+      # Every table must carry RLS tests. This guard is what stops a table from
+      # shipping unprotected because someone forgot — see docs/PLAN-M1.md §4.4.
+      - name: Require RLS tests once tables exist
+        run: |
+          migrations=$(find supabase/migrations -name '*.sql' 2>/dev/null | wc -l)
+          tests=$(find supabase/tests -name '*.sql' 2>/dev/null | wc -l)
+          if [ "$migrations" -gt 0 ] && [ "$tests" -eq 0 ]; then
+            echo "::error::Migrations exist but supabase/tests is empty. Every table needs RLS tests."
+            exit 1
+          fi
+          echo "migrations=$migrations tests=$tests"
+
+      - name: Run pgTAP tests
+        run: |
+          if [ "$(find supabase/tests -name '*.sql' 2>/dev/null | wc -l)" -gt 0 ]; then
+            pnpm test:db
+          else
+            echo "No pgTAP tests yet (pre-Slice 1). Skipping."
+          fi
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 \
+            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=ci-placeholder-anon-key \
+            --build-arg BUILD_SHA=${{ github.sha }} \
+            -t washbook:ci .
+
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Start Supabase
+        run: pnpm exec supabase start
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E
+        run: pnpm e2e
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_LOCAL_ANON_KEY || 'ci-placeholder-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_LOCAL_SERVICE_KEY || 'ci-placeholder-service-key' }}
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

@@ -1,0 +1,50 @@
+#!/usr/bin/env sh
+#
+# Refuse any push whose target branch is `main` — bootstrap brief §1.3 and
+# §3.1.5. This is the local enforcement of the branch-protection rule, and it
+# stands whether or not the GitHub API accepted a ruleset for this plan.
+#
+# git feeds this hook one line per ref on stdin:
+#   <local ref> <local sha> <remote ref> <remote sha>
+#
+# The single exception is the very first push, which creates `main` on a brand
+# new remote (remote sha is all zeros). Bootstrap §3.1.3 requires exactly that
+# push, once, at repository creation.
+
+ZERO='0000000000000000000000000000000000000000'
+blocked=0
+
+while read -r _local_ref _local_sha remote_ref remote_sha; do
+  [ -z "$remote_ref" ] && continue
+
+  case "$remote_ref" in
+    refs/heads/main)
+      if [ "$remote_sha" = "$ZERO" ]; then
+        echo "pre-push: creating 'main' on a new remote — allowed once, at repository creation."
+        continue
+      fi
+      blocked=1
+      ;;
+  esac
+done
+
+if [ "$blocked" -eq 1 ]; then
+  cat >&2 <<'MESSAGE'
+
+  ✖ Push to `main` refused.
+
+  `main` is protected and is only ever updated by a merged pull request
+  (bootstrap brief §4.1). To move your work onto a branch:
+
+      git branch feat/<epic>-<short-name>
+      git reset --hard origin/main
+      git checkout feat/<epic>-<short-name>
+      git push -u origin feat/<epic>-<short-name>
+
+  Do not bypass this with --no-verify.
+
+MESSAGE
+  exit 1
+fi
+
+exit 0

@@ -1,0 +1,11 @@
+# unrs-resolver ships a native binary used by eslint-plugin-import-x (via
+# eslint-config-next). Its postinstall selects the right prebuilt binary for the
+# platform; without it, type-aware import resolution fails on Windows and in CI.
+allowBuilds:
+  unrs-resolver: true
+
+# eslint 10.9.0 is newer than pnpm's default minimum-release-age gate. We pin
+# exact versions deliberately (see docs/PLAN-M1.md §2.5), so the gate would only
+# block a version we chose on purpose.
+minimumReleaseAgeExclude:
+  - eslint@10.9.0

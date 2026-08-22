@@ -1,0 +1,59 @@
+# WashBook — production-like local stack.
+#
+# HOW THIS RELATES TO THE SUPABASE CLI (bootstrap brief §5.2)
+# ----------------------------------------------------------
+# The Supabase CLI runs its own containers under Docker Desktop: Postgres, Auth
+# (GoTrue), PostgREST, Storage, Realtime, Studio and Kong. We deliberately do
+# NOT define a second Postgres here. Two competing databases on one machine —
+# one migrated by `supabase db reset`, one not — is the single most reliable way
+# to produce "it works on my machine".
+#
+# So: the CLI owns the data plane, this file owns the application, and the app
+# container joins the CLI's network.
+#
+#   pnpm db:start     # starts the Supabase containers, prints keys
+#   pnpm docker:up    # builds and starts WashBook, joined to that network
+#
+# The network is created by `supabase start` and is named after `project_id` in
+# supabase/config.toml. Override with SUPABASE_NETWORK if you renamed it.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Public by definition — Next inlines these into the browser bundle.
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://supabase_kong_WashBook:8000}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?set NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local — run "pnpm db:start" to get it}
+        BUILD_SHA: ${BUILD_SHA:-local}
+    image: washbook:local
+    container_name: washbook_app
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      # Server-only. Never baked into the image — supplied at run time.
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?set SUPABASE_SERVICE_ROLE_KEY in .env.local}
+      BUILD_SHA: ${BUILD_SHA:-local}
+    networks:
+      - supabase
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/washbook/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+networks:
+  supabase:
+    external: true
+    name: ${SUPABASE_NETWORK:-supabase_network_WashBook}

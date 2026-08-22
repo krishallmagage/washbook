@@ -1,0 +1,13 @@
+{
+  // Playwright specs are excluded from the app's tsconfig (Next must not
+  // compile them), but they still have to be typechecked and type-aware
+  // linted — an E2E suite is exactly where a silent type error hides a test
+  // that never actually asserts anything.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": ["**/*.ts", "../playwright.config.ts"],
+  "exclude": []
+}

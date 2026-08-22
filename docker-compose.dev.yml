@@ -1,0 +1,53 @@
+# WashBook — development stack with hot reload.
+#
+#   docker compose -f docker-compose.dev.yml up
+#
+# Differences from docker-compose.yml, and why each one exists:
+#
+#  * Runs `next dev` against a bind-mounted source tree, so an edit on the host
+#    is picked up in the container.
+#  * `node_modules` is a named volume mounted OVER the bind mount. Without this,
+#    the host's node_modules (Windows binaries) would shadow the container's
+#    (Linux binaries) and native packages such as @next/swc and @tailwindcss/oxide
+#    would fail to load.
+#  * WATCHPACK_POLLING is on. Docker Desktop on Windows and macOS does not
+#    deliver inotify events across the virtualisation boundary reliably, so file
+#    watching silently stops working without polling.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps
+    image: washbook:dev
+    container_name: washbook_app_dev
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev"
+    working_dir: /app
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      WATCHPACK_POLLING: 'true'
+      CHOKIDAR_USEPOLLING: 'true'
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://supabase_kong_WashBook:8000}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?set NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?set SUPABASE_SERVICE_ROLE_KEY in .env.local}
+      BUILD_SHA: development
+    volumes:
+      - .:/app
+      - washbook_dev_node_modules:/app/node_modules
+      - washbook_dev_next:/app/.next
+    networks:
+      - supabase
+
+volumes:
+  washbook_dev_node_modules:
+  washbook_dev_next:
+
+networks:
+  supabase:
+    external: true
+    name: ${SUPABASE_NETWORK:-supabase_network_WashBook}

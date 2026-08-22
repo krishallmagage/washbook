@@ -1,0 +1,42 @@
+version: 2
+
+updates:
+  # Versions are pinned exactly (no ^, no ~) so every update is a reviewed,
+  # deliberate change with CI behind it — bootstrap brief §7.
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore(deps)'
+    groups:
+      minor-and-patch:
+        update-types: ['minor', 'patch']
+      # Majors arrive one at a time. Two of these pins are deliberately behind
+      # the newest release (TypeScript 6 not 7, ESLint 9 not 10 — see
+      # CLAUDE.md §4), so a major bump needs reading, not merging.
+    ignore:
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@eslint/js'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: 'ci(deps)'
+
+  - package-ecosystem: docker
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: 'build(docker)'
