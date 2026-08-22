@@ -6,7 +6,13 @@ takings. That is the failure mode this document exists to prevent.
 
 ## Reporting a vulnerability
 
-Email **sprout@hsenidmobile.com** with `[WashBook security]` in the subject.
+**Preferred:** open a private advisory through GitHub —
+[Security → Report a vulnerability](https://github.com/krishallmagage/washbook/security/advisories/new).
+It stays private until we publish a fix, and it does not put the details in a
+public issue where anyone can read them before the fix ships.
+
+**Or:** email **sprout@hsenidmobile.com** with `[WashBook security]` in the
+subject.
 
 Please include what you found, how to reproduce it, and what an attacker could
 do with it. Do not open a public GitHub issue for a security problem, and do not
@@ -14,6 +20,18 @@ test against a live pilot site's data.
 
 You will get an acknowledgement within 3 working days and an assessment within 10. While this product is pre-launch there is no bounty programme; credit is
 given in the release notes unless you prefer otherwise.
+
+## This repository is public
+
+The source is world-readable. That changes nothing about the rules below —
+it makes them load bearing. Anyone can read every policy, every migration
+and every test, which is fine: the security of this system rests on Row
+Level Security and on secrets that live outside the repository, never on
+the source being hidden.
+
+GitHub secret scanning and push protection are enabled, so a key pushed by
+accident is blocked before it reaches the remote. Do not rely on that as
+the first line — it is the last one.
 
 ## Our standing rules
 

@@ -1,25 +1,28 @@
 Copyright (c) 2026 Krishall Magage. All rights reserved.
 
-WashBook — PROPRIETARY AND CONFIDENTIAL
+WashBook — SOURCE AVAILABLE, ALL RIGHTS RESERVED
 
-This software and its source code, documentation, designs and associated
-materials (the "Software") are the confidential and proprietary property of
-Krishall Magage (the "Owner").
+This repository is public: anyone may read it. Being readable is not a licence
+to use it.
 
-No licence is granted. Without the Owner's prior written permission, no person
-may copy, modify, merge, publish, distribute, sublicense, sell, disclose or
-create derivative works from the Software, in whole or in part, nor use it for
-any purpose.
+No permission is granted to copy, modify, merge, publish, distribute,
+sublicense, sell, or create derivative works from this software or its
+documentation, in whole or in part, nor to use it to operate a service, whether
+commercially or otherwise, without the prior written permission of the copyright
+holder.
 
-Access to this repository does not confer any right in the Software. Any person
-granted access holds the Software in confidence and must not disclose it to any
-third party.
+Permission IS granted to view the source, and to fork it on GitHub for the sole
+purpose of proposing a contribution back to this repository.
+
+Contributions: by opening a pull request you grant the copyright holder a
+perpetual, worldwide, irrevocable, royalty-free licence to use, modify and
+distribute your contribution as part of this software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE OWNER BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Third-party open-source components are licensed under their own terms; see the
@@ -27,6 +30,8 @@ dependency manifests for details.
 
 ---
 
-NOTE: this is the default proprietary notice chosen per bootstrap brief §3.2
-pending confirmation (docs/TASKS-M1.md, A-03). Replace it if a different licence
-is intended.
+NOTE: this replaced a "PROPRIETARY AND CONFIDENTIAL" notice, which became
+self-contradictory when the repository was made public on 22 August 2026 — a
+world-readable repository cannot be held in confidence. If you intended real
+open source instead, say so and this becomes MIT or Apache-2.0; that is a
+one-way door, so it is not assumed.
