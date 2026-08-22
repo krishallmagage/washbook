@@ -90,9 +90,16 @@ export default tseslint.config(
     },
   },
 
-  /* Config files run in Node and are not part of the app's type graph. */
+  /*
+   * Plain JS/MJS — config files and one-off scripts — run in Node and are not
+   * part of the app's TypeScript project, so type-aware rules have no type
+   * information to work from and crash rather than fail gracefully.
+   *
+   * The glob must be `**\/*.mjs`, not `*.mjs`: a bare `*.mjs` matches only the
+   * repository root, so a nested `scripts/foo.mjs` would slip through.
+   */
   {
-    files: ['*.mjs', '*.js', '*.config.ts'],
+    files: ['**/*.mjs', '**/*.js', '*.config.ts'],
     ...tseslint.configs.disableTypeChecked,
   },
 )
