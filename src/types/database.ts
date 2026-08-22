@@ -38,10 +38,12 @@ export type Database = {
         Row: {
           auth_user_id: string | null
           created_at: string
+          failed_pin_attempts: number
           full_name: string
           id: string
           is_active: boolean
           pin_hash: string | null
+          pin_locked_until: string | null
           pin_set_at: string | null
           role: Database["public"]["Enums"]["site_role"]
           site_id: string
@@ -49,10 +51,12 @@ export type Database = {
         Insert: {
           auth_user_id?: string | null
           created_at?: string
+          failed_pin_attempts?: number
           full_name: string
           id?: string
           is_active?: boolean
           pin_hash?: string | null
+          pin_locked_until?: string | null
           pin_set_at?: string | null
           role: Database["public"]["Enums"]["site_role"]
           site_id: string
@@ -60,10 +64,12 @@ export type Database = {
         Update: {
           auth_user_id?: string | null
           created_at?: string
+          failed_pin_attempts?: number
           full_name?: string
           id?: string
           is_active?: boolean
           pin_hash?: string | null
+          pin_locked_until?: string | null
           pin_set_at?: string | null
           role?: Database["public"]["Enums"]["site_role"]
           site_id?: string
@@ -197,9 +203,32 @@ export type Database = {
         Returns: Database["public"]["Enums"]["site_role"]
       }
       auth_site_id: { Args: never; Returns: string }
+      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      fn_device_users: {
+        Args: { p_device_id: string }
+        Returns: {
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["site_role"]
+        }[]
+      }
       fn_has_permission: {
         Args: { action: Database["public"]["Enums"]["permission_action"] }
         Returns: boolean
+      }
+      fn_set_pin: {
+        Args: { p_pin: string; p_user_id: string }
+        Returns: undefined
+      }
+      fn_verify_pin: {
+        Args: { p_device_id: string; p_pin: string; p_user_id: string }
+        Returns: Database["public"]["CompositeTypes"]["pin_verify_result"]
+        SetofOptions: {
+          from: "*"
+          to: "pin_verify_result"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
@@ -228,7 +257,15 @@ export type Database = {
         | "readonly"
     }
     CompositeTypes: {
-      [_ in never]: never
+      pin_verify_result: {
+        ok: boolean | null
+        user_id: string | null
+        site_id: string | null
+        site_role: Database["public"]["Enums"]["site_role"] | null
+        full_name: string | null
+        locked_until: string | null
+        failure_reason: string | null
+      }
     }
   }
 }

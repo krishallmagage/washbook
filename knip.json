@@ -3,9 +3,10 @@
   "entry": [
     "src/app/**/{page,layout,route,template,error,loading,not-found,global-error}.{ts,tsx}",
     "e2e/**/*.spec.ts",
-    "scripts/*.mjs"
+    "scripts/*.mjs",
+    "src/**/*.test.ts"
   ],
   "project": ["src/**/*.{ts,tsx}", "e2e/**/*.ts", "scripts/*.mjs"],
   "ignoreDependencies": ["@tailwindcss/postcss", "tailwindcss"],
-  "ignore": ["src/types/database.ts"]
+  "ignore": ["src/types/database.ts", "src/test/server-only-stub.ts"]
 }

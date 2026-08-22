@@ -42,6 +42,19 @@ export const serverSchema = z.object({
    * which is correct for local dev and for a hosted deployment.
    */
   SUPABASE_INTERNAL_URL: z.url().optional(),
+  /**
+   * The project's JWT signing secret. A verified PIN causes the server to mint
+   * a short-TTL token with this (ADR-0008), so a shared-device user is governed
+   * by the same RLS policies as everyone else rather than by a second
+   * authorisation system.
+   *
+   * Minimum 32 characters because HS256 with a short key is not meaningfully
+   * signed. This value is as dangerous as the service-role key: anything that
+   * can sign a token can mint one for any site and any role.
+   */
+  SUPABASE_JWT_SECRET: z
+    .string()
+    .min(32, { error: 'SUPABASE_JWT_SECRET must be at least 32 characters.' }),
   /** Injected by the Docker build; surfaced by the health route. */
   BUILD_SHA: z.string().default('development'),
   NODE_ENV: z

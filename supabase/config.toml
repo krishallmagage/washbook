@@ -281,9 +281,13 @@ max_frequency = "5s"
 # uri = "pg-functions://postgres/auth/before-user-created-hook"
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
-# [auth.hook.custom_access_token]
-# enabled = true
-# uri = "pg-functions://<database>/<schema>/<hook_name>"
+# S1-05 — puts site_id and site_role into Supabase Auth tokens so an Owner or
+# Manager is governed by exactly the same RLS policies as a PIN user (ADR-0008).
+# Without it their token carries no site claim and auth_site_id() returns null,
+# which under deny-by-default locks them out of their own site.
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/public/custom_access_token_hook"
 
 # Configure one of the supported SMS providers: `twilio`, `twilio_verify`, `messagebird`, `textlocal`, `vonage`.
 [auth.sms.twilio]
