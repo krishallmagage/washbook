@@ -49,3 +49,7 @@ pnpm-debug.log*
 # misc
 .turbo/
 tsconfig.tsbuildinfo
+
+# Commercial annexe — pricing, market analysis, personas, risks, sales playbook.
+# Extracted when the repository went public. Never commit this.
+docs/private/
