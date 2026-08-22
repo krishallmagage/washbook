@@ -46,7 +46,23 @@ const config = {
       ],
     ],
     'scope-empty': [1, 'never'],
-    'subject-case': [2, 'always', 'lower-case'],
+    /*
+     * Conventional Commits asks that a subject not be capitalised like a
+     * sentence or a title. It does NOT ask for the whole subject to be
+     * lowercase — and this domain is full of acronyms (RLS, PIN, VAT, PWA,
+     * XLSX, WhatsApp) that a blanket lower-case rule would mangle into
+     * unreadable prose.
+     *
+     * So: forbid the capitalisation styles the convention actually objects to,
+     * rather than requiring lower-case throughout. This is the
+     * @commitlint/config-conventional default; the original stricter override
+     * was mine and was wrong.
+     */
+    'subject-case': [
+      2,
+      'never',
+      ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
+    ],
     'subject-max-length': [2, 'always', 72],
     /* "The body is not optional for anything other than a trivial chore. It is
        the note I will read in six months." — bootstrap brief §4.2. Warned

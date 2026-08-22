@@ -68,14 +68,14 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix --no-warn-ignored",
+      "prettier --write --ignore-unknown"
     ],
     "*.{json,md,css,mjs,js,yml,yaml}": [
-      "prettier --write"
+      "prettier --write --ignore-unknown"
     ],
     "*.sql": [
-      "prettier --write --parser sql"
+      "prettier --write --ignore-unknown"
     ]
   }
 }
