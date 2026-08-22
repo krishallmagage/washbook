@@ -15,7 +15,7 @@ jobs:
       # Versioning is derived from Conventional Commits — never hand-edit the
       # version or the CHANGELOG (bootstrap brief §4.3). 0.x through M1;
       # 1.0.0 when the pilot exit criteria in PRD §19 are met.
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v5
         with:
           release-type: node
           package-name: washbook

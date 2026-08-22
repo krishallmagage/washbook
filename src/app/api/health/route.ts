@@ -22,11 +22,14 @@ async function checkDatabase(): Promise<DatabaseStatus> {
   const startedAt = performance.now()
   try {
     const env = getClientEnv()
-    const supabase = createClient(
-      env.NEXT_PUBLIC_SUPABASE_URL,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      { auth: { persistSession: false } },
-    )
+    // This route runs on the server, so it must use the internal URL where one
+    // is configured — inside a container the browser-facing 127.0.0.1 address
+    // points at the container itself.
+    const url =
+      getServerEnv().SUPABASE_INTERNAL_URL ?? env.NEXT_PUBLIC_SUPABASE_URL
+    const supabase = createClient(url, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+      auth: { persistSession: false },
+    })
 
     // Cheapest possible round trip that proves PostgREST and Postgres are both
     // up. Slice 1 replaces this with a count against `sites`, which also proves

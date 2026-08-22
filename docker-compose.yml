@@ -23,8 +23,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # Public by definition — Next inlines these into the browser bundle.
-        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://supabase_kong_WashBook:8000}
+        # Public by definition — Next inlines these into the browser bundle, so
+        # this must be an address the BROWSER can reach, not a Docker hostname.
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://127.0.0.1:54321}
         NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?set NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local — run "pnpm db:start" to get it}
         BUILD_SHA: ${BUILD_SHA:-local}
     image: washbook:local
@@ -37,6 +38,10 @@ services:
       PORT: 3000
       # Server-only. Never baked into the image — supplied at run time.
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?set SUPABASE_SERVICE_ROLE_KEY in .env.local}
+      # The browser reaches Supabase on 127.0.0.1:54321 (baked into the bundle
+      # at build time); server code inside this container cannot — 127.0.0.1 is
+      # the container. Server-to-server traffic goes over the Supabase network.
+      SUPABASE_INTERNAL_URL: ${SUPABASE_INTERNAL_URL:-http://supabase_kong_WashBook:8000}
       BUILD_SHA: ${BUILD_SHA:-local}
     networks:
       - supabase
