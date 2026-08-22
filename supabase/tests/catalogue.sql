@@ -8,7 +8,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(24);
+select plan(26);
 
 insert into public.sites (id, name) values
   ('aaaaaaaa-0000-4000-8000-000000000001', 'Site A'),
@@ -186,12 +186,16 @@ select throws_ok(
   'BR-10 — cells of an effective price list cannot be edited'
 );
 
+-- DELETE is granted on no table in this schema (BR-15), so this is refused as a
+-- privilege error rather than by the BR-10 trigger. A draft cell is withdrawn by
+-- setting is_offered = false, which keeps the grid complete and the decision on
+-- the record.
 select throws_ok(
   $$ delete from public.price_list_items
       where price_list_id = 'aaaaaaaa-3333-4000-8000-000000000001' $$,
-  '23514',
+  '42501',
   null,
-  'BR-10 — cells of an effective price list cannot be deleted'
+  'BR-15 — price cells are never deleted, only withdrawn'
 );
 
 -- A future-dated list is still a draft and may be edited.

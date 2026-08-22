@@ -13,7 +13,12 @@ from anon, authenticated;
 
 grant select, insert, update on public.vehicle_classes  to authenticated;
 grant select, insert, update on public.services         to authenticated;
-grant select, insert         on public.price_lists      to authenticated;
+-- UPDATE is granted so a DRAFT (future-dated) price list can still be edited.
+-- Immutability once the list takes effect is BR-10's job and belongs to the
+-- trigger, not to the grant: without UPDATE here the BR-10 trigger would never
+-- run at all, and "a price list in effect cannot be edited" would be true only
+-- by accident of a missing privilege.
+grant select, insert, update on public.price_lists      to authenticated;
 grant select, insert, update on public.price_list_items to authenticated;
 grant select                 on public.audit_entries    to authenticated;
 
@@ -69,6 +74,13 @@ create policy price_lists_select on public.price_lists
 
 create policy price_lists_insert on public.price_lists
   for insert to authenticated
+  with check (site_id = public.auth_site_id()
+              and public.fn_has_permission('edit_price_list'));
+
+create policy price_lists_update on public.price_lists
+  for update to authenticated
+  using (site_id = public.auth_site_id()
+         and public.fn_has_permission('edit_price_list'))
   with check (site_id = public.auth_site_id()
               and public.fn_has_permission('edit_price_list'));
 
