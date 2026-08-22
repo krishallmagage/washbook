@@ -31,6 +31,17 @@ export const serverSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1, {
     error: 'SUPABASE_SERVICE_ROLE_KEY is required on the server.',
   }),
+  /**
+   * Server-to-server Supabase URL, used when the app cannot reach Supabase at
+   * the same address the browser uses.
+   *
+   * In Docker this matters: NEXT_PUBLIC_SUPABASE_URL is baked at build time and
+   * must be an address the *browser* can reach (127.0.0.1:54321), but inside
+   * the container that address is the container itself. Server code needs the
+   * Supabase network hostname instead. Optional — falls back to the public URL,
+   * which is correct for local dev and for a hosted deployment.
+   */
+  SUPABASE_INTERNAL_URL: z.url().optional(),
   /** Injected by the Docker build; surfaced by the health route. */
   BUILD_SHA: z.string().default('development'),
   NODE_ENV: z

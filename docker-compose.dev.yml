@@ -32,9 +32,12 @@ services:
       HOSTNAME: 0.0.0.0
       WATCHPACK_POLLING: 'true'
       CHOKIDAR_USEPOLLING: 'true'
-      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://supabase_kong_WashBook:8000}
+      # Browser-facing (inlined into the bundle) vs server-to-server. See the
+      # note in docker-compose.yml — they are not interchangeable in a container.
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-http://127.0.0.1:54321}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?set NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local}
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?set SUPABASE_SERVICE_ROLE_KEY in .env.local}
+      SUPABASE_INTERNAL_URL: ${SUPABASE_INTERNAL_URL:-http://supabase_kong_WashBook:8000}
       BUILD_SHA: development
     volumes:
       - .:/app

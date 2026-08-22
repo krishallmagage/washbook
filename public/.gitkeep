@@ -1,0 +1,5 @@
+Next.js serves this directory at the base path, and the Dockerfile copies it
+into the runner stage. Git does not track empty directories, so this file keeps
+it present — without it `COPY /app/public` fails and the image cannot build.
+
+Slice 3 (S3-06) fills this with the PWA manifest and icons.
