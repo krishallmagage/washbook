@@ -204,8 +204,9 @@ function main() {
 
   gh(['repo', 'edit', SLUG, '--default-branch', 'main'], { allowFail: true })
 
-  // 2 — branch protection. May be rejected on private repos on some plans;
-  // report honestly rather than skipping silently (bootstrap brief §3.1.5).
+  // 2 — branch protection. Free on public repositories; rejected for private
+  // ones on the free plan. Either way report honestly rather than skipping
+  // silently (bootstrap brief §3.1.5).
   console.log('\nAttempting branch protection on main…')
   const protectionPayload = JSON.stringify({
     required_pull_request_reviews: { required_approving_review_count: 0 },
@@ -236,9 +237,9 @@ function main() {
   )
   if (protection === null) {
     console.log(
-      '⚠ Branch protection was REJECTED (commonly unavailable for private repos\n' +
-        '  on the free plan). The Husky pre-push hook enforces the same rule locally.\n' +
-        '  This is reported, not silently skipped.',
+      '⚠ Branch protection was REJECTED. That is expected for a PRIVATE repo on\n' +
+        '  the free plan; it is free on PUBLIC repos. The Husky pre-push hook\n' +
+        '  enforces the same rule, but only on this machine.',
     )
   } else {
     console.log('✓ branch protection applied')

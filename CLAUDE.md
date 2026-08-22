@@ -60,7 +60,11 @@ requires a note`. Every acceptance criterion in PRD §9 becomes a test case. The
 
 ## 3. Never
 
-- Never push directly to `main`. The `pre-push` hook enforces this locally.
+- Never push directly to `main`. Enforced in two places: GitHub branch
+  protection (pull request required, all four CI checks must pass, force
+  pushes and deletion blocked, admins included) and the local `pre-push`
+  hook, which still matters because it fails in seconds instead of after a
+  round trip.
 - Never `git push --force` on a shared branch, and never `--force-with-lease` on
   `main`.
 - Never use `--no-verify` to skip hooks.
