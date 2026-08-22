@@ -24,6 +24,12 @@ updates:
         update-types: ['version-update:semver-major']
       - dependency-name: '@eslint/js'
         update-types: ['version-update:semver-major']
+      # @types/node tracks the RUNTIME major, not the newest published types.
+      # 26.x describes Node APIs that do not exist in the version we run, so
+      # accepting a major here would let code typecheck against functions that
+      # are absent at runtime. Revisit when the runtime moves (OQ-A).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
     directory: '/'
